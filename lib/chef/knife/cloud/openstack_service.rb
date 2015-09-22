@@ -5,6 +5,7 @@
 #
 
 require 'chef/knife/cloud/fog/service'
+require 'fog'
 
 class Chef
   class Knife
@@ -18,7 +19,6 @@ class Chef
           Chef::Log.debug("openstack_endpoint_type #{Chef::Config[:knife][:openstack_endpoint_type] || 'publicURL' }")
           Chef::Log.debug("openstack_insecure #{Chef::Config[:knife][:openstack_insecure].to_s}")
           Chef::Log.debug("openstack_region #{Chef::Config[:knife][:openstack_region].to_s}")
-
           super(options.merge(auth_params: get_auth_params))
         end
 
@@ -59,7 +59,7 @@ class Chef
             next unless k.to_s.start_with?('openstack')
             params[k] = Chef::Config[:knife][k]
           end
-
+          params['openstack_auth_url'] = Chef::Config[:knife][:openstack_auth_url]
           params
         end
       end
